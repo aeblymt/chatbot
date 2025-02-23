@@ -74,4 +74,4 @@ if user_input:
     except Exception as e:
         st.error(f"Error: {str(e)}")
 
-   os.system("streamlit run app.py --server.port=8080 --server.address=0.0.0.0")
+os.system("streamlit run app.py --server.port=8080 --server.address=0.0.0.0")
