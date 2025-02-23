@@ -28,7 +28,7 @@ Your goal is to **educate, advise, and guide** users toward leveraging AI soluti
 2. **Lead Capture & Conversion Focus**  
    - Avoid giving full AI implementation strategies for free.  
    - Instead, highlight the benefits and offer to guide them through implementation in a **consulting session**.  
-   - Example: *"There are several AI tools for automation, but selecting the right one depends on your business model. Would you like a free AI strategy session? [Contact Us](https://www.eauclaireai.com/contact)."*
+   - Example: *"There are several AI tools for automation, but selecting the right one depends on your business model. Would you like a free AI strategy session?"*
 
 3. **Position AI as a Game-Changer**  
    - Show how AI improves efficiency, saves costs, and drives growth.  
@@ -41,7 +41,7 @@ Your goal is to **educate, advise, and guide** users toward leveraging AI soluti
 5. **Handle Common Business AI Concerns with Confidence**  
    - *"Will AI work for my business?"* → "Absolutely. AI adapts to your industry’s unique challenges. Let’s explore the best options for you."  
    - *"How much does AI cost?"* → "Costs vary, but we tailor AI solutions to match your budget and maximize ROI."  
-   - *"What’s the first step in using AI?"* → "The best way to start is with an AI strategy session. [Contact Us](https://www.eauclaireai.com/contact)."  
+   - *"What’s the first step in using AI?"* → "The best way to start is with an AI strategy session."  
 
 ### **Final Instruction:**
 Every response must be clear, insightful, and guide the user toward either:  
@@ -52,35 +52,35 @@ Every response must be clear, insightful, and guide the user toward either:
 Keep your responses **supreme, professional, and focused on high-value business impact**.
 """
 
-# Streamlit UI
-st.title("Eau Claire AI - AI Consulting Assistant")
-st.write("Ask me about AI solutions, automation, and consulting!")
-
-# User input
-user_input = st.text_input("How can I help you today?")
-
-if user_input:
+@app.route("/chat", methods=["POST"])
+def chat():
+    """Handles incoming chat messages from Wix and returns AI-generated responses."""
     try:
-        # Initialize OpenAI client (API v1.0+)
-        client = openai.OpenAI(api_key=openai.api_key)
+        data = request.get_json()
+        if not data or "message" not in data:
+            return jsonify({"error": "Invalid request format"}), 400
+
+        user_message = data["message"].strip()
+
+        if not user_message:
+            return jsonify({"error": "Message cannot be empty"}), 400
 
         # Generate AI response with the system prompt
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": system_prompt},  # System prompt here
-                {"role": "user", "content": user_input}
+                {"role": "user", "content": user_message}
             ]
         )
 
-        # Display response
-        st.write(response.choices[0].message.content)
+        ai_reply = response.choices[0].message.content.strip()
+        return jsonify({"reply": ai_reply})
 
-        # Lead Capture Call-to-Action
-        st.write("Interested in an AI consultation? [Contact Us](https://www.eauclaireai.com/contact)")
-
+    except openai.OpenAIError as e:
+        return jsonify({"error": f"OpenAI API error: {str(e)}"}), 500
     except Exception as e:
-        st.error(f"Error: {str(e)}")
+        return jsonify({"error": f"Server error: {str(e)}"}), 500
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))  # ✅ Uses Render's assigned port
