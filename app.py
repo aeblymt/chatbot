@@ -1,10 +1,6 @@
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 import openai
-import streamlit as st
-st.set_page_config(
-    page_title="AI Chatbot",
-    layout="wide",  # Makes it fit better in Wix
-    initial_sidebar_state="collapsed"
-)
 import os
 
 app = Flask(__name__)
