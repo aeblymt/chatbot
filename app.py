@@ -52,6 +52,10 @@ Every response must be clear, insightful, and guide the user toward either:
 Keep your responses **supreme, professional, and focused on high-value business impact**.
 """
 
+@app.route("/", methods=["GET"])
+def home():
+    return "Chatbot API is running!", 200  # ✅ Returns a success message
+
 @app.route("/chat", methods=["POST"])
 def chat():
     """Handles incoming chat messages from Wix and returns AI-generated responses."""
@@ -69,7 +73,7 @@ def chat():
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": system_prompt},  # System prompt here
+                {"role": "system", "content": "You are a helpful AI assistant."},
                 {"role": "user", "content": user_message}
             ]
         )
