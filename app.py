@@ -1,5 +1,6 @@
 import openai
 import streamlit as st
+st.set_page_config(page_title="AI Chatbot", layout="centered", initial_sidebar_state="collapsed")
 import os
 
 # Securely retrieve OpenAI API Key
