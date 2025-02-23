@@ -74,4 +74,5 @@ if user_input:
     except Exception as e:
         st.error(f"Error: {str(e)}")
 
-os.system("streamlit run app.py --server.port=8080 --server.address=0.0.0.0")
+if __name__ == "__main__":
+    os.system("streamlit run app.py --server.port=8080 --server.address=0.0.0.0")
