@@ -7,8 +7,15 @@ st.set_page_config(
 )
 import os
 
-# Securely retrieve OpenAI API Key
-openai.api_key = os.getenv("OPENAI_API_KEY")
+app = Flask(__name__)
+CORS(app)  # ✅ Allows Wix frontend to connect
+
+# ✅ Get API key from environment variable
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    raise ValueError("Missing OpenAI API key. Set it in Render environment variables.")
+
+client = openai.OpenAI(api_key=api_key)
 
 # Supreme AI Consultant System Prompt
 system_prompt = """
